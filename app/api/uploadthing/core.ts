@@ -2,7 +2,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { UTApi } from "uploadthing/server";
-import { currentProfile } from "@/lib/currentProfile";
+import { currentProfile } from "@/lib/actions/profile.actions";
 
 const f = createUploadthing();
 
