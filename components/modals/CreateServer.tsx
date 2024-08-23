@@ -27,9 +27,15 @@ import {
 import { createServerSchema, CreateServerValues } from "@/schemas";
 import FileUpload from "../shared/FileUpload";
 import { createServer } from "@/lib/actions/server.actions";
-const InitialModal = () => {
-  const [isMounted, setMounted] = useState(false);
+import { useModal } from "@/hooks/user-modal-store";
+
+const CreateServerModal = () => {
+  const { isOpen, onClose, type } = useModal();
+
   const router = useRouter();
+
+  const isModalOpen = isOpen && type === "createServer";
+
   const [isPending, startTransition] = useTransition();
   const form = useForm<CreateServerValues>({
     resolver: zodResolver(createServerSchema),
@@ -39,29 +45,25 @@ const InitialModal = () => {
     },
   });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   function onSubmit(values: CreateServerValues) {
     startTransition(async () => {
       const newServer = await createServer(values);
 
       if (newServer) {
-        form.reset();
+        handleClose();
         router.refresh();
-        window.location.reload;
         router.push(`/servers/${newServer.id}`);
       }
     });
   }
 
-  if (!isMounted) {
-    return null;
+  function handleClose() {
+    form.reset();
+    onClose();
   }
 
   return (
-    <Dialog open>
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black overflow-hidden p-0">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="h3-bold text-center">
@@ -130,5 +132,4 @@ const InitialModal = () => {
   );
 };
 
-export default InitialModal;
-1;
+export default CreateServerModal;

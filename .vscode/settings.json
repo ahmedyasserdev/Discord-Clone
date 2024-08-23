@@ -1,0 +1,30 @@
+{
+    "workbench.colorCustomizations": {
+        "editor.background": "#23293388", // Darker blue-gray background previous 1A1F27
+        "editor.foreground": "#C9D4DE", // Light blue-gray text
+        "tab.activeBackground": "#263549",  // Dark navy blue for the active tab
+        "tab.inactiveBackground": "#1E2937", // Darker blue-gray for inactive tabs
+        "tab.activeForeground": "#DCE6F1",  // Light blue-white text on the active tab
+        "tab.inactiveForeground": "#8F9DAA", // Muted light blue-gray text on inactive tabs
+        "sideBar.background": "#232D3B",  // Darker blue background for the sidebar
+        "sideBar.foreground": "#B4C2CD",  // Soft light blue-gray text in the sidebar
+        "activityBar.background": "#2C3B4D", // Dark navy blue background for the activity bar
+        "activityBar.foreground": "#D9E3EE", // Light blue-white text/icons in the activity bar
+        "activityBarBadge.background": "#40546B", // Dark medium blue badge color
+        "activityBarBadge.foreground": "#CFD9E4", // Light blue-gray text in badges
+        "terminal.background": "#232933",    // Darker blue-gray background in the terminal
+        "terminal.foreground": "#B8C3CF",    // Light blue-gray text in the terminal
+        "terminalCursor.background": "#B4C2CD", // Light blue-gray cursor background
+        "terminalCursor.foreground": "#DCE6F1", // Light blue-white cursor text
+        "terminal.ansiBlack": "#202935",      // Dark blue-black for ANSI black
+        "terminal.ansiRed": "#A74D4D",        // Muted red for ANSI red with good contrast
+        "terminal.ansiGreen": "#719F7F",      // Muted teal green for ANSI green
+        "terminal.ansiYellow": "#A9915F",     // Muted sandy yellow for ANSI yellow
+        "terminal.ansiBlue": "#5B769B",       // Darker medium blue for ANSI blue
+        "terminal.ansiMagenta": "#81658F",    // Darker violet for ANSI magenta
+        "terminal.ansiCyan": "#668796",       // Dark teal for ANSI cyan
+        "terminal.ansiWhite": "#C7D2DD",      // Light blue-gray for ANSI white
+        "editor.selectionBackground": "#36475D", // Darker navy blue for selection background
+        "editor.selectionHighlightBackground": "#425572" // Dark blue highlight with good contrast
+      }
+}

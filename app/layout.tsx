@@ -3,7 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import ModeToggler from "@/components/shared/ModeToggler"
+import ModalProvider from "@/components/providers/ModalProvider"
 import { cn } from "@/lib/utils";
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -31,6 +31,7 @@ export default function RootLayout({
          storageKey="discord-key"
          disableTransitionOnChange
       >
+        <ModalProvider />
         {children}
       </ThemeProvider>
         </body>

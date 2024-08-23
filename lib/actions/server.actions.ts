@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid"
 import { db } from "../db";
 import { MemberRole, Server } from "@prisma/client";
 import { currentProfile } from "./profile.actions";
+import { revalidatePath } from "next/cache";
 
 export const createServer = async(values: CreateServerValues) : Promise<Server> => {
   const validatedFields = createServerSchema.safeParse(values);
@@ -31,6 +32,8 @@ export const createServer = async(values: CreateServerValues) : Promise<Server> 
             }
         }
     })
+
+      revalidatePath(`/servers/${newServer.id}`)
     return newServer
 
 };
