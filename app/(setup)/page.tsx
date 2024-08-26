@@ -1,5 +1,5 @@
 import InitialModal from '@/components/modals/InitialModal';
-import { useModal } from '@/hooks/user-modal-store';
+import { useModal } from '@/hooks/use-modal-store';
 import { initialProfile } from '@/lib/actions/profile.actions'
 import { db } from '@/lib/db';
 import { redirect } from 'next/navigation';

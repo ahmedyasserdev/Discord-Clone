@@ -64,8 +64,8 @@ model Member {
 
 enum ChannelType {
   TEXT
-  Audio
-  Video
+  AUDIO
+  VIDEO
 }
 
 model Channel {
@@ -82,3 +82,4 @@ model Channel {
   @@index([serverId])
   @@index([profileId])
 }
+

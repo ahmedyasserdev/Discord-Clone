@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState, useTransition } from "react";
+import {  useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -27,7 +27,7 @@ import {
 import { createServerSchema, CreateServerValues } from "@/schemas";
 import FileUpload from "../shared/FileUpload";
 import { createServer } from "@/lib/actions/server.actions";
-import { useModal } from "@/hooks/user-modal-store";
+import { useModal } from "@/hooks/use-modal-store";
 
 const CreateServerModal = () => {
   const { isOpen, onClose, type } = useModal();

@@ -11,7 +11,7 @@ interface ModalData {
     query?: Record<string, any>
 }
 
-interface ModalStore{
+type ModalStore = {
     type: ModalType | null;
     data: ModalData
     isOpen: boolean;

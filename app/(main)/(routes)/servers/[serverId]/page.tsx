@@ -1,13 +1,8 @@
+import { getServerById } from "@/lib/actions/server.actions";
 import { db } from "@/lib/db";
 import { Metadata } from "next";
 import React, { cache } from "react";
 
-const getServerById = cache(async (id: string) => {
-  const server = await db.server.findUnique({
-    where: { id },
-  });
-  return server;
-});
 
 
 export async function generateMetadata({

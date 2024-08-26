@@ -6,6 +6,7 @@ import { db } from "../db";
 import { MemberRole, Server } from "@prisma/client";
 import { currentProfile } from "./profile.actions";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
 export const createServer = async(values: CreateServerValues) : Promise<Server> => {
   const validatedFields = createServerSchema.safeParse(values);
@@ -37,3 +38,38 @@ export const createServer = async(values: CreateServerValues) : Promise<Server> 
     return newServer
 
 };
+
+
+export const getServerById = cache(async (id: string) => {
+  const server = await db.server.findUnique({
+    where: { id },
+  });
+  return server;
+});
+
+
+export const generateNewInviteCode = async (serverId : string ) => {
+    try {
+      const  profile = await currentProfile();
+
+      if (!profile) throw new Error("Unauthanticated");
+
+        if (!serverId) throw new Error("serverId is missing");
+
+        const serverToUpdate = await db.server.update({
+          where  : {
+            id : serverId ,
+            profileId : profile.id
+          },
+          data : {
+            inviteCode : uuidv4(),
+          }
+        })
+
+
+        return serverToUpdate;
+
+    }catch (error) {
+        console.log('[GENERATE_NEW_CODE_ACTION]' , error)
+    }
+}
