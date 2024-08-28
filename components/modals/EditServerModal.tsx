@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {  useTransition } from "react";
+import {  useTransition  , useEffect} from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -14,7 +14,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+ 
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -26,16 +26,15 @@ import {
 } from "@/components/ui/form";
 import { serverSchema, ServerValues } from "@/schemas";
 import FileUpload from "../shared/FileUpload";
-import { createServer } from "@/lib/actions/server.actions";
+import { editServer } from "@/lib/actions/server.actions";
 import { useModal } from "@/hooks/use-modal-store";
 
-const CreateServerModal = () => {
-  const { isOpen, onClose, type } = useModal();
-
+const EditServerModal = () => {
+  const { isOpen, onClose, type , data } = useModal();
+  const {server} = data;
   const router = useRouter();
 
-  const isModalOpen = isOpen && type === "createServer";
-
+  const isModalOpen = isOpen && type === "editServer";
   const [isPending, startTransition] = useTransition();
   const form = useForm<ServerValues>({
     resolver: zodResolver(serverSchema),
@@ -45,25 +44,30 @@ const CreateServerModal = () => {
     },
   });
 
-  function onSubmit(values: ServerValues) {
-    startTransition(async () => {
-      const newServer = await createServer(values);
+   useEffect(() => {
+    if (server) {
+      form.setValue("name" , server.name)
+      form.setValue("imageUrl" , server.imageUrl)
+    }
+   } , [form , server])
 
-      if (newServer) {
-        handleClose();
+  function onSubmit(values: ServerValues) {
+    
+    startTransition(async () => {
+      if (!server) return;
+      const editedServer = await editServer({ serverId : server.id   ,  values});
+
+      if (editedServer) {
+        onClose();
         router.refresh();
-        router.push(`/servers/${newServer.id}`);
+        router.push(`/servers/${editedServer.id}`);
       }
     });
   }
 
-  function handleClose() {
-    form.reset();
-    onClose();
-  }
-
+ 
   return (
-    <Dialog open={isModalOpen} onOpenChange={handleClose}>
+    <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white text-black overflow-hidden p-0">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="h3-bold text-center">
@@ -122,7 +126,7 @@ const CreateServerModal = () => {
 
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant="primary" disabled={isPending}>
-                Create server
+                Save
               </Button>
             </DialogFooter>
           </form>
@@ -132,4 +136,4 @@ const CreateServerModal = () => {
   );
 };
 
-export default CreateServerModal;
+export default EditServerModal;

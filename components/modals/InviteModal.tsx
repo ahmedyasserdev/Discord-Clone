@@ -46,6 +46,7 @@ const InviteModal = () => {
   const handleGeneratingNewInviteCode = () => {
     startTransition(async() =>{
       try {
+        if (!server) return ;
         const updatedServerWithNewInviteCode = await generateNewInviteCode(server?.id)
           onOpen('invite' , { server :  updatedServerWithNewInviteCode})
       }catch (error) {

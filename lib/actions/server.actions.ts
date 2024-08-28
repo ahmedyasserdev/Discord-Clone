@@ -1,6 +1,6 @@
 "use server";
 
-import { createServerSchema, CreateServerValues } from "@/schemas";
+import { serverSchema,ServerValues } from "@/schemas";
 import { v4 as uuidv4 } from "uuid"
 import { db } from "../db";
 import { MemberRole, Server } from "@prisma/client";
@@ -8,8 +8,8 @@ import { currentProfile } from "./profile.actions";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
-export const createServer = async(values: CreateServerValues) : Promise<Server> => {
-  const validatedFields = createServerSchema.safeParse(values);
+export const createServer = async(values:ServerValues ) : Promise<Server> => {
+  const validatedFields = serverSchema.safeParse(values);
     const currentUser  = await currentProfile()
     if (!currentUser) throw new Error("Unauthorized")
   if (!validatedFields.success) throw new Error("Missing Required Fields");
@@ -72,4 +72,34 @@ export const generateNewInviteCode = async (serverId : string ) => {
     }catch (error) {
         console.log('[GENERATE_NEW_CODE_ACTION]' , error)
     }
+}
+
+
+export const editServer = async({serverId , values} : {serverId : string ; values : ServerValues} ) => {
+  try {
+    const validatedFields = serverSchema.safeParse(values);
+    const profile = await currentProfile();
+    if (!profile) throw new Error("Unauthanticated");
+    if (!serverId) throw new Error("serverId is missing");
+    if (!validatedFields.success) throw new Error("Missing Required Fields");
+
+    const { imageUrl, name } = validatedFields.data;
+
+
+      const server = await db.server.update({
+        where : {
+          id : serverId ,
+          profileId : profile.id,
+        },
+        data : {
+          imageUrl, name
+        }
+      })
+
+        revalidatePath(`/servers/${server.id}`)
+
+      return server
+  }catch (error) {
+    console.log('[EDIT_SERVER]' , error)
+}
 }
