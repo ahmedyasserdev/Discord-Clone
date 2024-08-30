@@ -37,7 +37,7 @@ const InviteCodePage =async ({params : {inviteCode} } : {params : {inviteCode : 
             }
         })
 
-  return null ;
+  return redirect(`/servers/${server.id}`) ;
 }
 
 export default InviteCodePage;
