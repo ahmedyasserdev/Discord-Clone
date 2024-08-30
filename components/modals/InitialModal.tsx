@@ -24,15 +24,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { createServerSchema, CreateServerValues } from "@/schemas";
+import { serverSchema, ServerValues } from "@/schemas";
 import FileUpload from "../shared/FileUpload";
 import { createServer } from "@/lib/actions/server.actions";
 const InitialModal = () => {
   const [isMounted, setMounted] = useState(false);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<CreateServerValues>({
-    resolver: zodResolver(createServerSchema),
+  const form = useForm<ServerValues>({
+    resolver: zodResolver(serverSchema),
     defaultValues: {
       name: "",
       imageUrl: "",
@@ -43,7 +43,7 @@ const InitialModal = () => {
     setMounted(true);
   }, []);
 
-  function onSubmit(values: CreateServerValues) {
+  function onSubmit(values: ServerValues) {
     startTransition(async () => {
       const newServer = await createServer(values);
 

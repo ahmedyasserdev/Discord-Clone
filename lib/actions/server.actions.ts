@@ -101,5 +101,39 @@ export const editServer = async({serverId , values} : {serverId : string ; value
       return server
   }catch (error) {
     console.log('[EDIT_SERVER]' , error)
+    }
 }
+
+export const leaveServer = async (serverId : string) => {
+  try {
+    const profile = await currentProfile();
+    if (!profile) throw new Error("Unauthanticated");
+    if (!serverId) throw new Error("serverId is missing");
+
+    const server = await db.server.update({
+      where: {
+        id : serverId ,
+        profileId : {
+          not : profile.id
+        },
+
+        members : {
+          some : {
+            profileId : profile.id
+          }
+        }
+      },
+      data : {
+        members : {
+          deleteMany : {
+            profileId : profile.id,
+          }
+        }
+      }
+    });
+
+    return server
+  }catch (error) {
+    console.log('[LEAVER_SERVER]' , error)
+    }
 }

@@ -33,10 +33,9 @@ import {
   ShieldAlert,
   MoreVertical,
   ShieldQuestion,
-  Shield,
-  Check,
   Loader2,
   Gavel,
+  Check,
 } from "lucide-react";
 import { MemberRole } from "@prisma/client";
 import axios from 'axios'
@@ -88,8 +87,7 @@ const MembersModal = () => {
       }
     })
   }
-
-  const onKick =  (memberId: string) => { 
+  const onKick = (memberId: string) => {
     startTransition(async () => {
       try {
         setLoadingId(memberId);
@@ -171,7 +169,7 @@ const MembersModal = () => {
 
                         <DropdownMenuSeparator />
 
-                        <DropdownMenuItem  onClick = {() => onKick(member.id)} >
+                        <DropdownMenuItem onClick={() => onKick(member.id)} >
                           <Gavel className="size-4 mr-2" />
                           Kick
                         </DropdownMenuItem>
