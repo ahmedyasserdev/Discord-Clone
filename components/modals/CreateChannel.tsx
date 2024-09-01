@@ -53,7 +53,7 @@ const CreateChannelModal = () => {
 
   function onSubmit(values: ChannelValues) {
     startTransition(async () => {
-      const newChannel = await createChannel({values , serverId });
+      const newChannel = await createChannel({values , serverId :serverId as string });
 
       if (newChannel) {
         handleClose();
