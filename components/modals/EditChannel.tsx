@@ -1,27 +1,23 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {  useEffect, useTransition } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import {
   Dialog,
   DialogContent,
- 
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -33,32 +29,31 @@ import {
 } from "@/components/ui/form";
 import { channelSchema, ChannelValues } from "@/schemas";
 import { useModal } from "@/hooks/use-modal-store";
-import { createChannel } from "@/lib/actions/channel.actions";
-import { ChannelType } from "@prisma/client";
+import { Channel, ChannelType, Server } from "@prisma/client";
+import { updatedChannel } from "@/lib/actions/channel.actions";
 
-const CreateChannelModal = () => {
-  const { isOpen, onClose, type  , data} = useModal();
+const EditChannelModal = () => {
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
-  const  {serverId} = useParams();
-  const isModalOpen = isOpen && type === "createChannel";
-  const {channelType} = data as {channelType : ChannelType}
+  const isModalOpen = isOpen && type === "editChannel";
+  const { channel, server } = data as { channel: Channel, server: Server }
   const [isPending, startTransition] = useTransition();
   const form = useForm<ChannelValues>({
     resolver: zodResolver(channelSchema),
     defaultValues: {
       name: "",
-      type : channelType || ChannelType.TEXT
+      type: channel.type || ChannelType.TEXT
     },
   });
 
   function onSubmit(values: ChannelValues) {
     startTransition(async () => {
-      const updatedServerWithNewChannel = await createChannel({values , serverId :serverId as string });
+      const updatedServerWithUpdatedChannel = await updatedChannel({ values, serverId: server.id as string, channelId: channel.id as string });
 
-      if (updatedServerWithNewChannel) {
+      if (updatedServerWithUpdatedChannel) {
         handleClose();
-        router.refresh();  
-        router.push(`/servers/${serverId}`);
+        router.push(`/servers/${server.id}`);
+        router.refresh();
       }
     });
   }
@@ -70,21 +65,21 @@ const CreateChannelModal = () => {
 
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue('type' , channelType)
-    }else {
-      form.setValue('type' , ChannelType.TEXT)	
+
+    if (channel) {
+      form.setValue("name", channel.name);
+      form.setValue("type", channel.type);
     }
-  }, [isModalOpen , form , channelType]);
+  }, [isModalOpen, form]);
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black overflow-hidden p-0">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="h3-bold text-center">
-           Create Channel
+            Edit Channel
           </DialogTitle>
-       
+
         </DialogHeader>
 
         <Form {...form}>
@@ -117,31 +112,31 @@ const CreateChannelModal = () => {
 
 
 
-<FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Channel type</FormLabel>
-              <Select disabled = {isPending} onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className ="input-field capitalize ">
-                    <SelectValue placeholder={'Select a channel type.'} />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {
-                    Object.values(ChannelType).map((type) => (
-                      <SelectItem key = {type} value = {type} className = "capitalize" >{type.toLowerCase()}</SelectItem>
-                    ))
-                  }
-                </SelectContent>
-              </Select>
-             
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Channel type</FormLabel>
+                    <Select disabled={isPending} onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="input-field capitalize ">
+                          <SelectValue placeholder={'Select a channel type.'} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {
+                          Object.values(ChannelType).map((type) => (
+                            <SelectItem key={type} value={type} className="capitalize" >{type.toLowerCase()}</SelectItem>
+                          ))
+                        }
+                      </SelectContent>
+                    </Select>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
 
 
@@ -155,7 +150,7 @@ const CreateChannelModal = () => {
 
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant="primary" disabled={isPending}>
-                Create Channel
+                Save
               </Button>
             </DialogFooter>
           </form>
@@ -165,4 +160,4 @@ const CreateChannelModal = () => {
   );
 };
 
-export default CreateChannelModal;
+export default EditChannelModal;
