@@ -18,6 +18,7 @@ type ServerSidebarProps = {
 const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   const profile = await currentProfile();
   if (!profile) return auth().redirectToSignIn();
+  
 
   const iconMap = {
     [ChannelType.TEXT]: <Hash className="mr-2 size-4" />,

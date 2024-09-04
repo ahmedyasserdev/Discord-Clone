@@ -42,7 +42,7 @@ const EditChannelModal = () => {
     resolver: zodResolver(channelSchema),
     defaultValues: {
       name: "",
-      type: channel.type || ChannelType.TEXT
+      type: ChannelType.TEXT,
     },
   });
 

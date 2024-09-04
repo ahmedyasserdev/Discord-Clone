@@ -5,6 +5,8 @@ import { ChannelType, MemberRole } from "@prisma/client";
 import ActionTooltip from "../shared/ActionTooltip";
 import { Plus, Settings } from "lucide-react";
 import { useModal } from "@/hooks/use-modal-store";
+import { useEffect } from "react";
+import gsap from "gsap";
 
 type ServerSectionProps = {
     label: string;
@@ -15,8 +17,26 @@ type ServerSectionProps = {
 }
 const ServerSection = ({ label, sectionType, role, channelType, server }: ServerSectionProps) => {
     const { onOpen } = useModal();
+
+    useEffect(() => {
+        const serverSection = document.querySelector('.server-section');
+    
+          gsap.fromTo(serverSection, {
+            opacity: 0,
+            x : -100 ,
+            duration: 0.35,
+          }, {
+
+            opacity : 1 ,
+            x  : 0 ,
+            duration : 0.35
+
+          })
+         
+      }, []);
+    
     return (
-        <div className="py-2 flex-between">
+        <div className=" server-section py-2 flex-between">
             <p className="p-semibold-14 uppercase  text-zinc-500 dark:text-zinc-400">{label}</p>
 
             {

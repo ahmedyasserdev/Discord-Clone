@@ -23,7 +23,7 @@ export const createServer = async (values: ServerValues): Promise<Server> => {
       profileId: currentUser.id as string,
       inviteCode: uuidv4(),
       channels: {
-        create: [{ name: "General", profileId: currentUser.id as string }],
+        create: [{ name: "general", profileId: currentUser.id as string }],
       },
 
       members: {
@@ -37,8 +37,25 @@ export const createServer = async (values: ServerValues): Promise<Server> => {
 };
 
 export const getServerById = cache(async (id: string) => {
+  const profile = await currentProfile();
+  if (!profile) throw new Error("Unauthanticated");
   const server = await db.server.findUnique({
-    where: { id },
+    where: { id,
+       members : {some: {profileId: profile?.id as string}},
+     },
+     include  : {
+      channels : {
+        where : {
+          name :  {
+            equals : "general"	,
+            mode : "insensitive"
+          }
+        },
+        orderBy : {
+          createdAt : "asc"
+        }
+      }
+     }
   });
   return server;
 });

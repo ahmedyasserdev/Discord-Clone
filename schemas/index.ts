@@ -21,3 +21,10 @@ export const channelSchema =z.object({
 
 });
 export type ChannelValues = z.infer<typeof channelSchema>
+
+
+export const ChatInputSchema = z.object({
+  content : z.string().min(1)
+})
+
+export type ChatInputValues = z.infer<typeof ChatInputSchema>

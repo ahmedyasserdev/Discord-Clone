@@ -1,8 +1,8 @@
 import { currentProfile } from '@/lib/actions/profile.actions'
-import { auth } from '@clerk/nextjs/server';
 import React from 'react'
 import {redirect} from "next/navigation"
-import {db} from "@/lib/db"
+import { db } from '@/lib/db';
+import { auth } from '@clerk/nextjs/server';
 const InviteCodePage =async ({params : {inviteCode} } : {params : {inviteCode : string}}) => {
     const profile = await currentProfile();
     if (!profile) return auth().redirectToSignIn();

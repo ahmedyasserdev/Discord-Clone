@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import ModalProvider from "@/components/providers/ModalProvider"
 import { cn } from "@/lib/utils";
+import { SocketProvider } from "@/components/providers/SocketProvider";
 const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({
   return (
     <ClerkProvider afterSignOutUrl="/sign-in" >
     <html lang="en">
-      <body className={cn(openSans.className, "bg-white dark:bg-[#313348]")} suppressHydrationWarning>
+      <body className={cn(openSans.className, "bg-white dark:bg-[#313338]")} suppressHydrationWarning>
       <ThemeProvider
          attribute="class"
          defaultTheme="dark"
@@ -31,8 +32,10 @@ export default function RootLayout({
          storageKey="discord-key"
          disableTransitionOnChange
       >
-        <ModalProvider />
-        {children}
+      <SocketProvider>
+      <ModalProvider />
+      {children}
+      </SocketProvider>
       </ThemeProvider>
         </body>
     </html>
