@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 const MemberIdPage = async({ params : { memberId  , serverId }  } : { params : { memberId : string , serverId : string } } ) => {
   const profile = await currentProfile();
-  if (!profile) return auth().redirectToSignIn();
+  if (!profile) return redirect('/sign-in');
    
     const currentMember = await db.member.findFirst({
         where : {

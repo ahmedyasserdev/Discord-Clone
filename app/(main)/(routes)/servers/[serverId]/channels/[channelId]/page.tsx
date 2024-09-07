@@ -1,19 +1,23 @@
 import ChatHeader from '@/components/chat/ChatHeader';
 import ChatInput from '@/components/chat/ChatInput';
+import ChatMessages from '@/components/chat/ChatMessages';
 import { currentProfile } from '@/lib/actions/profile.actions';
 import { db } from '@/lib/db';
-import { auth } from '@clerk/nextjs/server';
+import {  } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 
 
 
 const ChannelIdPage = async({params : {serverId, channelId}} : {params : {serverId : string, channelId : string}}) => {
   const profile = await currentProfile();
-  if (!profile) return auth().redirectToSignIn();
+  if (!profile) return redirect('/sigin-in');
 
   const channel = await db.channel.findUnique({
     where: {
       id : channelId
+    },
+    include : {
+      messages : true
     }
   });
 
@@ -24,9 +28,10 @@ const ChannelIdPage = async({params : {serverId, channelId}} : {params : {server
     }
   });
 
+
   if (!channel || !member) return  redirect('/')
   return (
-    <div className='bg-white dark:bg-[#313338] h-full flex flex-col '>
+    <div className='bg-white dark:bg-[#313338] h-screen flex flex-col '>
       <ChatHeader
         name = {channel.name}
         serverId= {serverId}
@@ -35,7 +40,20 @@ const ChannelIdPage = async({params : {serverId, channelId}} : {params : {server
 
 
       <div className="flex-1">
-        Future Messages
+        <ChatMessages
+          name = {channel.name}
+          type = "channel"
+          member = {member}
+          apiUrl='/api/messages'
+          socketUrl='/api/socket/messages'
+          socketQuery={{
+            channelId,
+            serverId : channel.serverId
+          }}
+          paramKey='channelId'
+          paramValue={channel.id}
+          chatId={channel.id}
+        />
       </div>
 
 
@@ -43,7 +61,7 @@ const ChannelIdPage = async({params : {serverId, channelId}} : {params : {server
       apiUrl='/api/socket/messages'
         query={{
           channelId,
-          serverId : channel.serverId
+          serverId : channel.serverId,
         }}
       />
 

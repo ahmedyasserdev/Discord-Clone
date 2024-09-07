@@ -28,3 +28,12 @@ export const ChatInputSchema = z.object({
 })
 
 export type ChatInputValues = z.infer<typeof ChatInputSchema>
+
+
+  
+
+export const messageModalSchema = z.object({
+  fileUrl : z.string(),
+})
+
+export type MessageModalValues = z.infer<typeof messageModalSchema>

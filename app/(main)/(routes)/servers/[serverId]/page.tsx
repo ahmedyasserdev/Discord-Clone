@@ -21,7 +21,7 @@ export async function generateMetadata({
 
 const ServerIdPage = async({params : {serverId}} : {params : {serverId : string}}) => {
   const profile = await currentProfile();
-  if (!profile) return auth().redirectToSignIn();
+  if (!profile) return  redirect("/sign-in")
   const server =await  getServerById(serverId);
   const initialChanne = server?.channels[0];
 

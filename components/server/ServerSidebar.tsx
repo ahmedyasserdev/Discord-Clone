@@ -1,6 +1,5 @@
 import { currentProfile } from "@/lib/actions/profile.actions"
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
 import { ChannelType, MemberRole } from "@prisma/client"
 import { redirect } from "next/navigation";
 import ServerHeader from "./ServerHeader"
@@ -17,7 +16,7 @@ type ServerSidebarProps = {
 }
 const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   const profile = await currentProfile();
-  if (!profile) return auth().redirectToSignIn();
+  if (!profile) return redirect("/sign-in");
   
 
   const iconMap = {

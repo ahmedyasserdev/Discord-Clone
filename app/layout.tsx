@@ -5,7 +5,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import ModalProvider from "@/components/providers/ModalProvider"
 import { cn } from "@/lib/utils";
-import { SocketProvider } from "@/components/providers/SocketProvider";
+import  SocketProvider  from "@/components/providers/SocketProvider";
+import  QueryProvider  from "@/components/providers/QueryProvider";
 const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -34,7 +35,9 @@ export default function RootLayout({
       >
       <SocketProvider>
       <ModalProvider />
+      <QueryProvider>
       {children}
+      </QueryProvider>
       </SocketProvider>
       </ThemeProvider>
         </body>
